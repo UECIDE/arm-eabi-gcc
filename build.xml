@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<project name="arm-eabi-gcc" default="build">
+
+    <property name="version" value="4.8.2" />
+    <property name="revision" value="1" />
+
+    <target name="build" depends="linux,macosx,windows"> 
+    </target>
+
+    <target name="install" depends="build">
+        <move file="avr-gcc-linux32.jar" todir="/var/www/uecide/plugins/compilers" />
+        <move file="avr-gcc-macosx.jar" todir="/var/www/uecide/plugins/compilers" />
+        <move file="avr-gcc-windows.jar" todir="/var/www/uecide/plugins/compilers" />
+    </target>
+
+    <target name="macosx">
+        <mkdir dir="files" />
+        <get src="https://launchpad.net/gcc-arm-embedded/4.8/4.8-2013-q4-major/+download/gcc-arm-none-eabi-4_8-2013q4-20131218-mac.tar.bz2"
+             dest="files/gcc-arm-eabi-macosx.tar.bz2" usetimestamp="true" />
+
+        <mkdir dir="build/arm-eabi-gcc" />
+        <mkdir dir="files" />
+        <exec dir="files" executable="tar">
+            <arg value="-jxf" />
+            <arg value="gcc-arm-eabi-macosx.tar.bz2" />
+        </exec>
+        <copy todir="build/arm-eabi-gcc"> <fileset dir="files/gcc-arm-none-eabi-4_8-2013q4" includes="**/*"/> </copy>
+        <copy file="compiler.txt" todir="build/arm-eabi-gcc/" />
+        <replace file="build/arm-eabi-gcc/compiler.txt" token="%VERSION%" value="${version}" />
+        <replace file="build/arm-eabi-gcc/compiler.txt" token="%REVISION%" value="${revision}" />
+        <jar basedir="build" destfile="arm-eabi-gcc-macosx.jar">
+            <manifest>
+                <attribute name="Version" value="${version}-${revision}" />
+                <attribute name="Author" value="GNU" />
+                <attribute name="Compiler" value="arm-eabi-gcc" />
+                <attribute name="Family" value="arm-eabi" />
+                <attribute name="Platform" value="macosx" />
+                <attribute name="Arch" value="any" />
+            </manifest>
+        </jar>
+        <delete dir="files/gcc-arm-none-eabi-4_8-2013q4" />
+        <delete dir="build" />
+    </target>
+
+    <target name="linux">
+        <mkdir dir="files" />
+        <get src="https://launchpad.net/gcc-arm-embedded/4.8/4.8-2013-q4-major/+download/gcc-arm-none-eabi-4_8-2013q4-20131204-linux.tar.bz2"
+             dest="files/gcc-arm-eabi-linux.tar.bz2" usetimestamp="true" />
+
+        <mkdir dir="build/arm-eabi-gcc" />
+        <mkdir dir="files" />
+        <exec dir="files" executable="tar">
+            <arg value="-jxf" />
+            <arg value="gcc-arm-eabi-linux.tar.bz2" />
+        </exec>
+        <copy todir="build/arm-eabi-gcc"> <fileset dir="files/gcc-arm-none-eabi-4_8-2013q4" includes="**/*"/> </copy>
+        <copy file="compiler.txt" todir="build/arm-eabi-gcc/" />
+        <replace file="build/arm-eabi-gcc/compiler.txt" token="%VERSION%" value="${version}" />
+        <replace file="build/arm-eabi-gcc/compiler.txt" token="%REVISION%" value="${revision}" />
+        <jar basedir="build" destfile="arm-eabi-gcc-linux.jar">
+            <manifest>
+                <attribute name="Version" value="${version}-${revision}" />
+                <attribute name="Author" value="GNU" />
+                <attribute name="Compiler" value="arm-eabi-gcc" />
+                <attribute name="Family" value="arm-eabi" />
+                <attribute name="Platform" value="linux" />
+                <attribute name="Arch" value="i386,amd64" />
+            </manifest>
+        </jar>
+        <delete dir="files/gcc-arm-none-eabi-4_8-2013q4" />
+        <delete dir="build" />
+    </target>
+
+    <target name="windows">
+        <mkdir dir="files" />
+        <get src="https://launchpad.net/gcc-arm-embedded/4.8/4.8-2013-q4-major/+download/gcc-arm-none-eabi-4_8-2013q4-20131204-win32.zip"
+             dest="files/gcc-arm-eabi-windows.zip" usetimestamp="true" />
+
+        <mkdir dir="build/arm-eabi-gcc" />
+        <mkdir dir="files" />
+        <mkdir dir="files/gcc-arm-none-eabi-4_8-2013q4" />
+        <unzip dest="files/gcc-arm-none-eabi-4_8-2013q4" src="files/gcc-arm-eabi-windows.zip" overwrite="false" />
+        <copy todir="build/arm-eabi-gcc"> <fileset dir="files/gcc-arm-none-eabi-4_8-2013q4" includes="**/*"/> </copy>
+        <copy file="compiler.txt" todir="build/arm-eabi-gcc/" />
+        <replace file="build/arm-eabi-gcc/compiler.txt" token="%VERSION%" value="${version}" />
+        <replace file="build/arm-eabi-gcc/compiler.txt" token="%REVISION%" value="${revision}" />
+        <jar basedir="build" destfile="arm-eabi-gcc-windows.jar">
+            <manifest>
+                <attribute name="Version" value="${version}-${revision}" />
+                <attribute name="Author" value="GNU" />
+                <attribute name="Compiler" value="arm-eabi-gcc" />
+                <attribute name="Family" value="arm-eabi" />
+                <attribute name="Platform" value="windows" />
+                <attribute name="Arch" value="any" />
+            </manifest>
+        </jar>
+        <delete dir="files/gcc-arm-none-eabi-4_8-2013q4" />
+        <delete dir="build" />
+    </target>
+
+    <target name="clean">
+        <delete dir="files" />
+        <delete dir="build" />
+        <delete file="arm-eabi-gcc-linux.jar" />
+        <delete file="arm-eabi-gcc-macosx.jar" />
+        <delete file="arm-eabi-gcc-windows.jar" />
+    </target>
+</project>
