@@ -8,9 +8,9 @@
     </target>
 
     <target name="install" depends="build">
-        <move file="avr-gcc-linux32.jar" todir="/var/www/uecide/plugins/compilers" />
-        <move file="avr-gcc-macosx.jar" todir="/var/www/uecide/plugins/compilers" />
-        <move file="avr-gcc-windows.jar" todir="/var/www/uecide/plugins/compilers" />
+        <move file="arm-eabi-gcc-linux.jar" todir="/var/www/uecide/plugins/compilers" />
+        <move file="arm-eabi-gcc-macosx.jar" todir="/var/www/uecide/plugins/compilers" />
+        <move file="arm-eabi-gcc-windows.jar" todir="/var/www/uecide/plugins/compilers" />
     </target>
 
     <target name="macosx">
